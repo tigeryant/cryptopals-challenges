@@ -43,6 +43,7 @@ int main(int argc, const char * argv[]) {
     vector<bool> binaryVector;
     // int - number of input groups
     // vector of vectors: input group cache - stores input groups (as vectors), ready for encoding
+    vector<vector<bool>> inputGroupCache;
     // vector - base64 output
     
     // prompt for user input, get hex as string
@@ -123,13 +124,32 @@ int main(int argc, const char * argv[]) {
     cout << endl;
     
     // find the quotient when we mod the length of the binary vector by 24 (maybe use integer division for this)
-    // if the remainder is 0, (number of input groups = q), and thus the length of the inputGroupCache = q
-    // else, (number of input groups = q + 1) - the length of the inputGroupCache = q + 1
+    int quotient = binaryVector.size() / 24;
+    int remainder = binaryVector.size() % 24;
+    cout << "q: " << quotient << endl;
+    cout << "r: " << remainder << endl;
+    // if the remainder is 0, (number of input groups = q), and thus the length of the inputGroupCache = q (is this needed?)
+    // else, (number of input groups = q + 1) - the length of the inputGroupCache = q + 1 (inputGroupCache is a vector, and thus dynamic)
     
     // for 'quotient' times:
     // remove the first 24 elements of the binary vector.
     // store them in a vector called input group
     // add that input group to the input group cache
+    
+    for (int i = 0; i < quotient; i++) { //quotient + 1??
+        // declare a vector to store the slice
+        vector<bool> inputGroup(25);
+        // slice the first 24 elements of the binaryVector, store them in that vector
+        copy(binaryVector.begin(), binaryVector.begin() + 25, inputGroup.begin());
+
+        cout << "input group: " << endl;
+        for (bool bit: inputGroup)
+            cout << bit;
+        
+        // remove those elements from the binary vector
+    }
+    
+    cout << endl;
     
     // if the length of the remaining binary vector is longer than 0: (judge this based on r that we calculated earlier)
     // (so, if r > 0:)
