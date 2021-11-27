@@ -12,24 +12,21 @@
 using namespace std;
 
 // define the convertToBinary helper function
-vector<bool> convertToBinary(int charAsDecimal) {
+vector<bool> convertToBinary(int charAsDecimal) { // come back to this function - references may be uneccessary after all
     vector<bool> bits = {0, 0, 0, 0};
-    vector<bool> &b = bits;
+    vector<bool> &bitsRef = bits;
     
     int remainder = charAsDecimal;
-    int &r = remainder; // declaring a reference
+    int &remainderRef = remainder;
     
     for (int i = 3; i > -1; i--) {
-        //        if (&remainder - (pow(2, i) >= 0)) {
-//        cout << "loop running!" << endl;
-        if (r - pow(2, i) >= 0) {
-            r -= pow(2, i); // modify the original remainder, so its state is maintained
+        if (remainderRef - pow(2, i) >= 0) {
+            remainderRef -= pow(2, i);
             int index = 3 - i;
-            b[index] = 1; // modify the original bits vector
-            // c++ passes by value by default, here we need to explicitly pass bits by reference, not value
+            bitsRef[index] = 1;
         }
     }
-    return b;
+    return bitsRef;
 }
 
 
@@ -64,29 +61,22 @@ int main(int argc, const char * argv[]) {
         hexInputVector.erase(hexInputVector.begin(), hexInputVector.begin() + 2);
     }
     
-    cout << hexInputVector[0] << hexInputVector[1] << "\n"; // test
-    
-//    cout << convertToBinary(8)[0] << convertToBinary(8)[1] << convertToBinary(8)[2] << convertToBinary(8)[3] << endl;
-    
     // binary conversion test
-    for (int i = 0; i < 16; i++) {
-        vector<bool> returnedVector = convertToBinary(i);
-        for (bool bit: returnedVector)
-            cout << bit;
-
-        cout << endl;
-
-//        cout << convertToBinary(i) << endl;
-    }
-    
-    // halt execution
-    cout << "stop here" << endl;
+//    for (int i = 0; i < 16; i++) {
+//        vector<bool> returnedVector = convertToBinary(i);
+//        for (bool bit: returnedVector)
+//            cout << bit;
+//
+//        cout << endl;
+//
+////        cout << convertToBinary(i) << endl;
+//    }
     
     // for each element in the hexInputVector:
     // declare int charAsDecimal;
     // 1. if it's a letter, set charAsDecimal to corresponding number (see the lookup dict above)
     // 2. convert it to binary - use the algorithm from 26/11 (bottom of page) (call a separate function for this?)
-    // 3. append that 4-bit chunk to the binary vector (as ints or bools?)
+    // 3. append that 4-bit chunk to the binary vector as bools
     
     // map each element to its decimal equivalent
     
@@ -114,7 +104,7 @@ int main(int argc, const char * argv[]) {
                 break;
             default:
                 // convert hexCharacter from char to int and define the result as charAsDecimal
-                charAsDecimal = hexCharacter;
+                charAsDecimal = hexCharacter - '0';
                 break;
         }
         
@@ -124,6 +114,13 @@ int main(int argc, const char * argv[]) {
         // append the vector of boolean values (the result of the function call above) to binaryVector;
         binaryVector.insert(binaryVector.end(), bitsVector.begin(), bitsVector.end());
     }
+    
+    cout << "printing binary vector: " << endl;
+    // test display of binaryVector
+    for (bool bit: binaryVector)
+        cout << bit;
+    
+    cout << endl;
     
     // find the quotient when we mod the length of the binary vector by 24 (maybe use integer division for this)
     // if the remainder is 0, (number of input groups = q), and thus the length of the inputGroupCache = q
