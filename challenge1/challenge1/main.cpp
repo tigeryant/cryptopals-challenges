@@ -13,17 +13,23 @@ using namespace std;
 
 // define the convertToBinary helper function
 vector<bool> convertToBinary(int charAsDecimal) {
-    vector<bool> bitsVector = {0, 0, 0, 0};
-    int remainder = charAsDecimal;
+    vector<bool> bits = {0, 0, 0, 0};
+    vector<bool> &b = bits;
     
-    for (int i = 3; i == 0; i--) {
-        if (remainder - (pow(2, i))) {
-            remainder -= pow(2, i);
+    int remainder = charAsDecimal;
+    int &r = remainder; // declaring a reference
+    
+    for (int i = 3; i > -1; i--) {
+        //        if (&remainder - (pow(2, i) >= 0)) {
+//        cout << "loop running!" << endl;
+        if (r - pow(2, i) >= 0) {
+            r -= pow(2, i); // modify the original remainder, so its state is maintained
             int index = 3 - i;
-            bitsVector[index] = 1;
+            b[index] = 1; // modify the original bits vector
+            // c++ passes by value by default, here we need to explicitly pass bits by reference, not value
         }
     }
-    return bitsVector;
+    return b;
 }
 
 
@@ -60,6 +66,22 @@ int main(int argc, const char * argv[]) {
     
     cout << hexInputVector[0] << hexInputVector[1] << "\n"; // test
     
+//    cout << convertToBinary(8)[0] << convertToBinary(8)[1] << convertToBinary(8)[2] << convertToBinary(8)[3] << endl;
+    
+    // binary conversion test
+    for (int i = 0; i < 16; i++) {
+        vector<bool> returnedVector = convertToBinary(i);
+        for (bool bit: returnedVector)
+            cout << bit;
+
+        cout << endl;
+
+//        cout << convertToBinary(i) << endl;
+    }
+    
+    // halt execution
+    cout << "stop here" << endl;
+    
     // for each element in the hexInputVector:
     // declare int charAsDecimal;
     // 1. if it's a letter, set charAsDecimal to corresponding number (see the lookup dict above)
@@ -92,13 +114,15 @@ int main(int argc, const char * argv[]) {
                 break;
             default:
                 // convert hexCharacter from char to int and define the result as charAsDecimal
-                // charAsDecimal =
+                charAsDecimal = hexCharacter;
                 break;
         }
         
-        // call convert to binary function here
-        convertToBinary(charAsDecimal);
+        // call function to convert from hex to binary
+        vector<bool> bitsVector = convertToBinary(charAsDecimal);
+        
         // append the vector of boolean values (the result of the function call above) to binaryVector;
+        binaryVector.insert(binaryVector.end(), bitsVector.begin(), bitsVector.end());
     }
     
     // find the quotient when we mod the length of the binary vector by 24 (maybe use integer division for this)
