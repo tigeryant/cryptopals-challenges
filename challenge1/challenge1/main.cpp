@@ -12,6 +12,9 @@
 
 using namespace std;
 
+// global declarations:
+vector<char> outputVector;
+
 // declare and initialize the base64 lookup table
 map<string, char> base64Lookup = {
     {"000000", 'A'}, {"000001", 'B'}, {"000010", 'C'}, {"000011", 'D'}, {"000100", 'E'}, {"000101", 'F'}, {"000110", 'G'}, {"000111", 'H'}, {"001000", 'I'}, {"001001", 'J'}, {"001010", 'K'}, {"001011", 'L'}, {"001100", 'M'}, {"001101", 'N'}, {"001110", 'O'}, {"001111", 'P'}, {"010000", 'Q'}, {"010001", 'R'}, {"010010", 'S'}, {"010011", 'T'}, {"010100", 'U'}, {"010101", 'V'}, {"010110", 'W'}, {"010111", 'X'}, {"011000", 'Y'}, {"011001", 'Z'}, {"011010", 'a'}, {"011011", 'b'}, {"011100", 'c'}, {"011101", 'd'}, {"011110", 'e'}, {"011111", 'f'}, {"100000", 'g'}, {"100001", 'h'}, {"100010", 'i'}, {"100011", 'j'}, {"100100", 'k'}, {"100101", 'l'}, {"100110", 'm'}, {"100111", 'n'}, {"101000", 'o'}, {"101001", 'p'}, {"101010", 'q'}, {"101011", 'r'}, {"101100", 's'}, {"101101", 't'}, {"101110", 'u'}, {"101111", 'v'}, {"110000", 'w'}, {"110001", 'x'}, {"110001", 'x'}, {"110010", 'y'}, {"110011", 'z'}, {"110100", '0'}, {"110101", '1'}, {"110110", '2'}, {"110111", '3'}, {"111000", '4'}, {"111001", '5'}, {"111010", '6'}, {"111011", '7'}, {"111100", '8'}, {"111101", '9'}, {"111110", '+'}, {"111111", '/'},
@@ -35,7 +38,7 @@ vector<bool> convertToBinary(int charAsDecimal) { // come back to this function 
     return bitsRef;
 }
 
-void encodeGroup(vector<bool> inputGroup, int sextets, vector<char> output) {
+void encodeGroup(vector<bool> inputGroup, int sextets) {
     // test
     cout << "input group: ";
     for (bool bit: inputGroup)
@@ -63,15 +66,16 @@ void encodeGroup(vector<bool> inputGroup, int sextets, vector<char> output) {
                 sextetString[i] = '0';
             }
         }
-        cout << "sextet string: " << sextetString << endl;
+//        cout << "sextet string: " << sextetString << endl;
         
         inputGroup.erase(inputGroup.begin(), inputGroup.begin() + 6);
         
         // use the base64 lookup table to reference the output char
         // append this to the output vector
-        output.push_back(base64Lookup[sextetString]);
+        outputVector.push_back(base64Lookup[sextetString]); // put this back later
         
-        cout << "output size in function: " << output.size() << endl;
+//        cout << "output size in function: " << output.size() << endl;
+//        cout << base64Lookup[sextetString];
     }
 }
 
@@ -93,8 +97,8 @@ int main(int argc, const char * argv[]) {
     // padding length of the final input group
     int paddingLength;
     // vector - base64 output
-    vector<char> outputVector;
-    vector<char> &ov = outputVector;
+//    vector<char> outputVector;
+//    vector<char> &ov = outputVector;
     
     // prompt for user input, get hex as string
     cout << "Enter a hex number: ";
@@ -252,7 +256,7 @@ int main(int argc, const char * argv[]) {
     
     for (int i = 0; i < (inputGroupCache.size() - 1); i++) {
         cout << "encoding" << endl;
-        encodeGroup(inputGroupCache[0], 4, ov);
+        encodeGroup(inputGroupCache[0], 4);
         inputGroupCache.erase(inputGroupCache.begin());
     }
     
@@ -261,17 +265,17 @@ int main(int argc, const char * argv[]) {
     // derive the number of times to encode sextets from the paddingLength
     // call the encodeGroup function, passing it the input group and the number just calculated (as the number of sextets to encode)
     
-    encodeGroup(inputGroupCache[0], (binaryVector.size() / 6), ov);
+    encodeGroup(inputGroupCache[0], (binaryVector.size() / 6));
     
     // test
 //    cout << base64Lookup["100010"] << endl;
     
     // test
     cout << "output vector size: " << outputVector.size() << endl;
-    
-    
-    // print the base64 output vector
-    cout << "output: ";
+//
+//
+//    // print the base64 output vector
+    cout << "base64 output: ";
     for (char bit: outputVector)
         cout << bit;
     cout << endl;
