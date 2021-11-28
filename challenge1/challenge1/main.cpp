@@ -13,6 +13,7 @@
 using namespace std;
 
 // global declarations:
+// vector - base64 output
 vector<char> outputVector;
 
 // declare and initialize the base64 lookup table
@@ -96,9 +97,7 @@ int main(int argc, const char * argv[]) {
     vector<vector<bool>> inputGroupCache;
     // padding length of the final input group
     int paddingLength;
-    // vector - base64 output
-//    vector<char> outputVector;
-//    vector<char> &ov = outputVector;
+    
     
     // prompt for user input, get hex as string
     cout << "Enter a hex number: ";
@@ -115,17 +114,6 @@ int main(int argc, const char * argv[]) {
         cout << "0 and x present - erasing" << "\n";
         hexInputVector.erase(hexInputVector.begin(), hexInputVector.begin() + 2);
     }
-    
-    // binary conversion test
-//    for (int i = 0; i < 16; i++) {
-//        vector<bool> returnedVector = convertToBinary(i);
-//        for (bool bit: returnedVector)
-//            cout << bit;
-//
-//        cout << endl;
-//
-////        cout << convertToBinary(i) << endl;
-//    }
     
     // for each element in the hexInputVector:
     // declare int charAsDecimal;
@@ -246,15 +234,15 @@ int main(int argc, const char * argv[]) {
     // test:
     cout << "inputGroupCache length (2nd): " << inputGroupCache.size() << endl;
     
-    // work from here - if the remainder is zero, don't push the binary vector to the inputGroupCache. (wrong - a final dry run is fine) - this is determined from the padding length being 24 and cancelling any encoding operations.
+    // calculate initial inputGroupCache.size()
+    int totalGroups = inputGroupCache.size();
     
-    
-    // for (the inputGroupCache size - 1):
+    // for (the inputGroupCache size - 1): (the initial size)
     // load in the next input group and remove it from the cache
     // call the encodeGroup function, passing it the input group, and the number 4 (as the number of sextets to encode)
     // (passing by value is fine here)
     
-    for (int i = 0; i < (inputGroupCache.size() - 1); i++) {
+    for (int i = 0; i < (totalGroups - 1); i++) {
         cout << "encoding" << endl;
         encodeGroup(inputGroupCache[0], 4);
         inputGroupCache.erase(inputGroupCache.begin());
@@ -267,13 +255,10 @@ int main(int argc, const char * argv[]) {
     
     encodeGroup(inputGroupCache[0], (binaryVector.size() / 6));
     
-    // test
-//    cout << base64Lookup["100010"] << endl;
     
     // test
     cout << "output vector size: " << outputVector.size() << endl;
-//
-//
+
 //    // print the base64 output vector
     cout << "base64 output: ";
     for (char bit: outputVector)
