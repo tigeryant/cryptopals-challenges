@@ -16,6 +16,9 @@ using namespace std;
 // vector - base64 output
 vector<char> outputVector;
 
+// declare vector of valid hex characters
+vector<char> validHexChars { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'x'};
+
 // declare and initialize the base64 lookup table
 map<string, char> base64Lookup = {
     {"000000", 'A'}, {"000001", 'B'}, {"000010", 'C'}, {"000011", 'D'}, {"000100", 'E'}, {"000101", 'F'}, {"000110", 'G'}, {"000111", 'H'}, {"001000", 'I'}, {"001001", 'J'}, {"001010", 'K'}, {"001011", 'L'}, {"001100", 'M'}, {"001101", 'N'}, {"001110", 'O'}, {"001111", 'P'}, {"010000", 'Q'}, {"010001", 'R'}, {"010010", 'S'}, {"010011", 'T'}, {"010100", 'U'}, {"010101", 'V'}, {"010110", 'W'}, {"010111", 'X'}, {"011000", 'Y'}, {"011001", 'Z'}, {"011010", 'a'}, {"011011", 'b'}, {"011100", 'c'}, {"011101", 'd'}, {"011110", 'e'}, {"011111", 'f'}, {"100000", 'g'}, {"100001", 'h'}, {"100010", 'i'}, {"100011", 'j'}, {"100100", 'k'}, {"100101", 'l'}, {"100110", 'm'}, {"100111", 'n'}, {"101000", 'o'}, {"101001", 'p'}, {"101010", 'q'}, {"101011", 'r'}, {"101100", 's'}, {"101101", 't'}, {"101110", 'u'}, {"101111", 'v'}, {"110000", 'w'}, {"110001", 'x'}, {"110001", 'x'}, {"110010", 'y'}, {"110011", 'z'}, {"110100", '0'}, {"110101", '1'}, {"110110", '2'}, {"110111", '3'}, {"111000", '4'}, {"111001", '5'}, {"111010", '6'}, {"111011", '7'}, {"111100", '8'}, {"111101", '9'}, {"111110", '+'}, {"111111", '/'},
@@ -40,14 +43,6 @@ vector<bool> convertToBinary(int charAsDecimal) { // come back to this function 
 }
 
 void encodeGroup(vector<bool> inputGroup, int sextets) {
-    // test
-    cout << "input group: ";
-    for (bool bit: inputGroup)
-        cout << bit;
-    cout << endl;
-    
-    cout << "sextets: " << sextets << endl;
-    
     for (int i = 0; i < sextets; i++) {
         // declare a string of length 6 (call it sextetString?)
         // for the first 6 elements of the inputGroup:
@@ -67,22 +62,16 @@ void encodeGroup(vector<bool> inputGroup, int sextets) {
                 sextetString[i] = '0';
             }
         }
-//        cout << "sextet string: " << sextetString << endl;
         
         inputGroup.erase(inputGroup.begin(), inputGroup.begin() + 6);
         
         // use the base64 lookup table to reference the output char
         // append this to the output vector
-        outputVector.push_back(base64Lookup[sextetString]); // put this back later
-        
-//        cout << "output size in function: " << output.size() << endl;
-//        cout << base64Lookup[sextetString];
-        
-        // initialize a string of padding
-        
+        outputVector.push_back(base64Lookup[sextetString]);
     }
-    char paddingChar = '=';
     
+    // initialize a string of padding
+    char paddingChar = '=';
     
     // add a switch statement for output padding here
     switch (sextets) {
@@ -129,9 +118,18 @@ int main(int argc, const char * argv[]) {
     // store each character as an element of a vector
     copy(hexInputString.begin(), hexInputString.end(), back_inserter(hexInputVector));
     
+    // loop through the input vector. If any element (char) is not 0-9, a-f or x, cout 'invalid input, and terminate program
+    for (int i = 0; i < hexInputVector.size(); i++) {
+        if(find(validHexChars.begin(), validHexChars.end(), hexInputVector[i]) != validHexChars.end()) {
+            continue;
+        } else {
+            cout << "invalid input" << endl;
+            return 0;
+        }
+    }
+    
     // if the first two elements are 0 and x, discard them
     if (hexInputVector[0] == '0' && hexInputVector[1] == 'x') {
-        cout << "0 and x present - erasing" << "\n";
         hexInputVector.erase(hexInputVector.begin(), hexInputVector.begin() + 2);
     }
     
@@ -183,18 +181,9 @@ int main(int argc, const char * argv[]) {
         binaryVector.insert(binaryVector.end(), bitsVector.begin(), bitsVector.end());
     }
     
-    cout << "printing binary vector: " << endl;
-    // test display of binaryVector
-    for (bool bit: binaryVector)
-        cout << bit;
-    
-    cout << endl;
-    
     // find the quotient when we mod the length of the binary vector by 24 (maybe use integer division for this)
     int quotient = binaryVector.size() / 24;
     int remainder = binaryVector.size() % 24;
-    cout << "q: " << quotient << endl;
-    cout << "r: " << remainder << endl;
     // if the remainder is 0, (number of input groups = q), and thus the length of the inputGroupCache = q (is this needed?)
     // else, (number of input groups = q + 1) - the length of the inputGroupCache = q + 1 (inputGroupCache is a vector, and thus dynamic)
     
@@ -208,29 +197,13 @@ int main(int argc, const char * argv[]) {
         vector<bool> inputGroup(24);
         // slice the first 24 elements of the binaryVector, store them in that vector
         copy(binaryVector.begin(), binaryVector.begin() + 25, inputGroup.begin());
-
-        cout << "input group: " << endl;
-        for (bool bit: inputGroup)
-            cout << bit;
-        cout << endl;
         
         // remove those elements from the binary vector
         binaryVector.erase(binaryVector.begin(), binaryVector.begin() + 24);
         
         // add the inputGroup to the inputGroupCache
         inputGroupCache.push_back(inputGroup);
-        
-        // test:
-        cout << "binary vector: " << endl;
-        for (bool bit: binaryVector)
-            cout << bit;
-        cout << endl;
-        
-        // test:
-        cout << "inputGroupCache length: " << inputGroupCache.size() << endl;
     }
-    
-    cout << endl;
     
     // if the length of the remaining binary vector is longer than 0: (judge this based on r that we calculated earlier)
     // (so, if r > 0:)
@@ -244,20 +217,11 @@ int main(int argc, const char * argv[]) {
         }
     }
     
-    // test:
-    cout << "binary vector as sextets: " << endl;
-    for (bool bit: binaryVector)
-        cout << bit;
-    cout << endl;
-    
     // take the difference between 24 and the binary vector length
     // add *this* binary vector to the input group cache (which is a vector of vectors)
     
     paddingLength = 24 - binaryVector.size();
     inputGroupCache.push_back(binaryVector);
-    
-    // test:
-    cout << "inputGroupCache length (2nd): " << inputGroupCache.size() << endl;
     
     // calculate initial inputGroupCache.size()
     int totalGroups = inputGroupCache.size();
@@ -268,7 +232,6 @@ int main(int argc, const char * argv[]) {
     // (passing by value is fine here)
     
     for (int i = 0; i < (totalGroups - 1); i++) {
-        cout << "encoding" << endl;
         encodeGroup(inputGroupCache[0], 4);
         inputGroupCache.erase(inputGroupCache.begin());
     }
@@ -279,17 +242,12 @@ int main(int argc, const char * argv[]) {
     // call the encodeGroup function, passing it the input group and the number just calculated (as the number of sextets to encode)
     
     encodeGroup(inputGroupCache[0], (binaryVector.size() / 6));
-    
-    
-    // test
-    cout << "output vector size: " << outputVector.size() << endl;
 
 //    // print the base64 output vector
     cout << "base64 output: ";
     for (char bit: outputVector)
         cout << bit;
     cout << endl;
-    
     
     
     return 0;
