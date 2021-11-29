@@ -77,6 +77,26 @@ void encodeGroup(vector<bool> inputGroup, int sextets) {
         
 //        cout << "output size in function: " << output.size() << endl;
 //        cout << base64Lookup[sextetString];
+        
+        // initialize a string of padding
+        
+    }
+    char paddingChar = '=';
+    
+    
+    // add a switch statement for output padding here
+    switch (sextets) {
+        case 2:
+            // add 2 chars of '=' padding to the end of the output vector
+            outputVector.push_back(paddingChar);
+            outputVector.push_back(paddingChar);
+            break;
+        case 1: case 3:
+            // add 1 char of '=' padding to the end of the output vector
+            outputVector.push_back(paddingChar);
+            break;
+        default:
+            break;
     }
 }
 
