@@ -115,6 +115,11 @@ int main(int argc, const char * argv[]) {
         hexInputVector.erase(hexInputVector.begin(), hexInputVector.begin() + 2);
     }
     
+    // pad the beginning with a zero if the input length is odd
+    if (hexInputVector.size() % 2 != 0) {
+        hexInputVector.insert(hexInputVector.begin(), 0);
+    }
+    
     // for each element in the hexInputVector:
     // declare int charAsDecimal;
     // 1. if it's a letter, set charAsDecimal to corresponding number (see the lookup dict above)
