@@ -138,7 +138,7 @@ int main(int argc, const char * argv[]) {
         binaryVector.insert(binaryVector.end(), bitsVector.begin(), bitsVector.end());
     }
     
-    int quotient = binaryVector.size() / 24;
+    int quotient = (int)(binaryVector.size() / 24);
     int remainder = binaryVector.size() % 24;
     
     // package the binary stream into input groups and add padding
@@ -157,9 +157,9 @@ int main(int argc, const char * argv[]) {
         }
     }
     
-    paddingLength = 24 - binaryVector.size();
+    paddingLength = (int)(24 - binaryVector.size());
     inputGroupCache.push_back(binaryVector);
-    int totalGroups = inputGroupCache.size();
+    int totalGroups = (int) inputGroupCache.size();
     
     //encode the input groups
     
@@ -168,7 +168,7 @@ int main(int argc, const char * argv[]) {
         inputGroupCache.erase(inputGroupCache.begin());
     }
     
-    encodeGroup(inputGroupCache[0], (binaryVector.size() / 6));
+    encodeGroup(inputGroupCache[0], ((int)binaryVector.size() / 6));
 
     // print the base64 output
     cout << "base64 output: ";
