@@ -17,7 +17,7 @@ using namespace std;
 vector<char> outputVector;
 
 // valid hex characters
-vector<char> validHexChars { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'x'};
+vector<char> validHexChars { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
 // base64 lookup table
 map<string, char> base64Lookup = {
@@ -88,6 +88,10 @@ int main(int argc, const char * argv[]) {
     transform(hexInputString.begin(), hexInputString.end(), hexInputString.begin(), ::tolower);
     copy(hexInputString.begin(), hexInputString.end(), back_inserter(hexInputVector));
     
+    if (hexInputVector[0] == '0' && hexInputVector[1] == 'x') {
+        hexInputVector.erase(hexInputVector.begin(), hexInputVector.begin() + 2);
+    }
+    
     for (int i = 0; i < hexInputVector.size(); i++) {
         if(find(validHexChars.begin(), validHexChars.end(), hexInputVector[i]) != validHexChars.end()) {
             continue;
@@ -95,10 +99,6 @@ int main(int argc, const char * argv[]) {
             cout << "invalid input" << endl;
             return 0;
         }
-    }
-    
-    if (hexInputVector[0] == '0' && hexInputVector[1] == 'x') {
-        hexInputVector.erase(hexInputVector.begin(), hexInputVector.begin() + 2);
     }
     
     if (hexInputVector.size() % 2 != 0) {
