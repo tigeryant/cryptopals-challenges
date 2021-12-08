@@ -2,7 +2,7 @@
 //  main.cpp
 //  challenge1
 //
-//  Created by John Davies on 23/11/2021.
+//  Created on 23/11/2021.
 //
 
 #include <iostream>
