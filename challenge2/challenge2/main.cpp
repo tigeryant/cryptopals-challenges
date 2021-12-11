@@ -76,9 +76,8 @@ vector<bool> convertToBinary(vector<char> hexInputVector) {
                 break;
         }
         
-        // then convert that decimal to its binary equivalent (4 bits)
+        // convert that decimal to its binary equivalent (4 bits)
         // add those bits to a binary vector
-        // return the binary vector
         
         vector<bool> bits = {0, 0, 0, 0};
         int remainder = charAsDecimal;
@@ -93,6 +92,7 @@ vector<bool> convertToBinary(vector<char> hexInputVector) {
         
         binVector.insert(binVector.end(), bits.begin(), bits.end());
     }
+    // return the binary vector
     return binVector;
 }
 
@@ -112,11 +112,11 @@ int main(int argc, const char * argv[]) {
     
     // declarations
     string hexPlainText;
-    vector<char> hexPlainTextVector; // maybe this could be declared locally within convertToBinary (use a generic hexInputVector for any input)
+    vector<char> hexPlainTextVector;
     vector<bool> binPlainTextVector;
     
-    
     string hexKey;
+    vector<char> hexKeyVector;
     vector<bool> binKeyVector;
     
     vector<bool> binCipherText;
@@ -127,7 +127,7 @@ int main(int argc, const char * argv[]) {
     cout << "Enter the plaintext in hexadecimal format: ";
     cin >> hexPlainText;
     
-    // call formatInput, passing it a char vector hexPainTextVector and returning a vector of chars
+    // call formatInput, passing it a string hexPlainTextVector and returning a vector of chars
     hexPlainTextVector = formatInput(hexPlainText);
     
     // call validate, passing it the hexPlainText char vector. It will return a bool
@@ -143,24 +143,37 @@ int main(int argc, const char * argv[]) {
     binPlainTextVector = convertToBinary(hexPlainTextVector);
     
     // test
-    cout << "binary output: ";
+    cout << "Plaintext binary output: ";
     for (bool bit: binPlainTextVector)
+        cout << bit;
+    cout << endl;
+    
+    cout << "Enter the key in hexadecimal format: ";
+    cin >> hexKey;
+    
+    // call formatInput, passing it a string hexKey and returning a vector of chars
+    hexKeyVector = formatInput(hexKey);
+    
+    // call validate, passing it the hexKeyVector char vector. It will return a bool
+    // if the bool returned is false, terminate execution by returning 0
+    if (!validate(hexKeyVector)) {
+        cout << "invalid input" << endl; // test
+        return 0;
+    } else { // test
+        cout << "valid input" << endl;
+    }
+    
+    // call convertToBinary, passing it a vector of chars and assigning it to vector<bool> binKeyVector
+    binKeyVector = convertToBinary(hexKeyVector);
+    
+    // test
+    cout << "Key binary output: ";
+    for (bool bit: binKeyVector)
         cout << bit;
     cout << endl;
     
     
     return 0; // test
-    
-    cout << "Enter the key in hexadecimal format: ";
-    cin >> hexKey;
-    
-    // call validate, passing it the hexKey. It will return a bool.
-    // if the bool returned is false, terminate execution by returning 0
-    
-    // call formatInput, passing it a string hexPainText and returning a vector of chars
-    // call convertToBinary, passing it a vector of chars and returning a vector of bools
-    
-    // from the call to convertToBinary, assign the returned vector<bool> binKeyVector
     
     
     
