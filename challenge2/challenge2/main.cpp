@@ -10,10 +10,34 @@
 
 using namespace std;
 
+// global declarations:
+
+// valid hex characters
+vector<char> validHexChars { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+
 // helper functions
 
 // function - validate - takes a string (hexInput) and returns a bool.
 // TODO start writing this function definition
+bool validate(string hexInput) {
+    vector<char> hexInputVector;
+    
+    transform(hexInput.begin(), hexInput.end(), hexInput.begin(), ::tolower);
+    copy(hexInput.begin(), hexInput.end(), back_inserter(hexInputVector));
+    
+    if (hexInputVector[0] == '0' && hexInputVector[1] == 'x') {
+        hexInputVector.erase(hexInputVector.begin(), hexInputVector.begin() + 2);
+    }
+    
+    for (int i = 0; i < hexInputVector.size(); i++) {
+        if(find(validHexChars.begin(), validHexChars.end(), hexInputVector[i]) != validHexChars.end()) {
+            continue;
+        } else {
+            return false;
+        }
+    }
+    return true;
+}
 
 // function - formatInput - takes a string (hexInput) and returns a vector of chars
 
@@ -52,6 +76,13 @@ int main(int argc, const char * argv[]) {
     
     // call validate, passing it the hexPlainText string. It will return a bool
     // if the bool returned is false, terminate execution by returning 0
+    if (!validate(hexPlainText)) {
+        cout << "invalid input" << endl; // test
+        return 0;
+    } else { // test
+        cout << "valid input" << endl;
+    }
+    return 0;
     
     // call formatInput, passing it a string hexPainText and returning a vector of chars
     // call convertToBinary, passing it a vector of chars and returning a vector of bools
