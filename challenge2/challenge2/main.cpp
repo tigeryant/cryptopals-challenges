@@ -12,12 +12,12 @@ using namespace std;
 
 // helper functions
 
-// function - convertToBinary - takes a string, returns a vector of bools
-// string (hex) --> char vector (hex) --> bool vector (binary)
+// function - validate - takes a string (hexInput) and returns a bool.
+// TODO start writing this function definition
 
-// function - rejectInvalidInput
+// function - formatInput - takes a string (hexInput) and returns a vector of chars
 
-// function - formatInput
+// function - convertToBinary - takes a vector of chars, returns a vector of bools
 
 // function - xor
 // takes two arguments of type vector <bool>
@@ -45,19 +45,32 @@ int main(int argc, const char * argv[]) {
     vector<bool> binCipherText;
     vector<char> hexCipherText;
     
+    // string (hex) --> char vector (hex) --> bool vector (binary)
+    
     cout << "Enter the plaintext in hexadecimal format: ";
     cin >> hexPlainText;
     
-    // call rejectInvalidInput
-    // call formatInput
-    // call convertToBinary, assign it to vector<bool> binPlainTextVector
+    // call validate, passing it the hexPlainText string. It will return a bool
+    // if the bool returned is false, terminate execution by returning 0
+    
+    // call formatInput, passing it a string hexPainText and returning a vector of chars
+    // call convertToBinary, passing it a vector of chars and returning a vector of bools
+    
+    // from the call to convertToBinary, assign the returned vector<bool> binPlainTextVector
+    
     
     cout << "Enter the key in hexadecimal format: ";
     cin >> hexKey;
     
-    // call rejectInvalidInput
-    // call formatInput
-    // call convertToBinary, assign it to vector<bool> binKeyVector
+    // call validate, passing it the hexKey. It will return a bool.
+    // if the bool returned is false, terminate execution by returning 0
+    
+    // call formatInput, passing it a string hexPainText and returning a vector of chars
+    // call convertToBinary, passing it a vector of chars and returning a vector of bools
+    
+    // from the call to convertToBinary, assign the returned vector<bool> binKeyVector
+    
+    
     
     // call xor, passing binPlainTextVector and binKeyVector
     // assign the result to binCipherText
