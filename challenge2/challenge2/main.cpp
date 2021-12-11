@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <vector>
+#include <math.h>
 
 using namespace std;
 
@@ -44,6 +45,56 @@ bool validate(vector<char> hexInputVector) {
 }
 
 // function - convertToBinary - takes a vector of chars, returns a vector of bools
+vector<bool> convertToBinary(vector<char> hexInputVector) {
+    vector<bool> binVector;
+    
+    // for each element of the input vector, convert it to its decimal equivalent
+    for (char hexCharacter : hexInputVector) {
+        int charAsDecimal;
+        
+        switch (hexCharacter) {
+            case 'a':
+                charAsDecimal = 10;
+                break;
+            case 'b':
+                charAsDecimal = 11;
+                break;
+            case 'c':
+                charAsDecimal = 12;
+                break;
+            case 'd':
+                charAsDecimal = 13;
+                break;
+            case 'e':
+                charAsDecimal = 14;
+                break;
+            case 'f':
+                charAsDecimal = 15;
+                break;
+            default:
+                charAsDecimal = hexCharacter - '0';
+                break;
+        }
+        
+        // then convert that decimal to its binary equivalent (4 bits)
+        // add those bits to a binary vector
+        // return the binary vector
+        
+        vector<bool> bits = {0, 0, 0, 0};
+        int remainder = charAsDecimal;
+        
+        for (int i = 3; i > -1; i--) {
+            if (remainder - pow(2, i) >= 0) {
+                remainder -= pow(2, i);
+                int index = 3 - i;
+                bits[index] = 1;
+            }
+        }
+        
+        binVector.insert(binVector.end(), bits.begin(), bits.end());
+    }
+    return binVector;
+}
 
 // function - xor
 // takes two arguments of type vector <bool>
@@ -87,14 +138,18 @@ int main(int argc, const char * argv[]) {
     } else { // test
         cout << "valid input" << endl;
     }
+    
+    // call convertToBinary, passing it a vector of chars and assigning it to vector<bool> binPlainTextVector
+    binPlainTextVector = convertToBinary(hexPlainTextVector);
+    
+    // test
+    cout << "binary output: ";
+    for (bool bit: binPlainTextVector)
+        cout << bit;
+    cout << endl;
+    
+    
     return 0; // test
-    
-    
-    
-    // call convertToBinary, passing it a vector of chars and returning a vector of bools
-    
-    // from the call to convertToBinary, assign the returned vector<bool> binPlainTextVector
-    
     
     cout << "Enter the key in hexadecimal format: ";
     cin >> hexKey;
