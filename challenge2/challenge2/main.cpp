@@ -8,6 +8,8 @@
 #include <iostream>
 #include <vector>
 #include <math.h>
+#include <boost/dynamic_bitset.hpp>
+//#include "dynamic_bitset.hpp"
 
 using namespace std;
 
@@ -96,9 +98,22 @@ vector<bool> convertToBinary(vector<char> hexInputVector) {
     return binVector;
 }
 
-// function - xor
+// function - xorInputs
 // takes two arguments of type vector <bool>
 // xors them and returns a vector <bool>
+boost::dynamic_bitset<unsigned long, std::allocator<unsigned long>> xorInputs(vector<bool> binPlainTextVector, vector<bool> binKeyVector) {
+    //return binPlainTextVector ^ binKeyVector;
+    
+    // working from here - see Fixed XOR notes in Bear
+    
+    boost::dynamic_bitset<unsigned long, std::allocator<unsigned long>> x(5);
+    
+    for (boost::dynamic_bitset<unsigned long, std::allocator<unsigned long>>::size_type i = 0; i < x.size(); ++i)
+            std::cout << x[i];
+    
+    return x;
+}
+
 
 // function - convertToHex
 // takes a vector <bool>, converts it to hex and returns a vector <char>
@@ -119,7 +134,8 @@ int main(int argc, const char * argv[]) {
     vector<char> hexKeyVector;
     vector<bool> binKeyVector;
     
-    vector<bool> binCipherText;
+//    vector<bool> binCipherText;
+    boost::dynamic_bitset<unsigned long, std::allocator<unsigned long>> binCipherText;
     vector<char> hexCipherText;
     
     // string (hex) --> char vector (hex) --> bool vector (binary)
@@ -173,18 +189,17 @@ int main(int argc, const char * argv[]) {
     cout << endl;
     
     
-    return 0; // test
+    //return 0; // test
     
     
     
-    // call xor, passing binPlainTextVector and binKeyVector
-    // assign the result to binCipherText
+    // call xor, passing binPlainTextVector and binKeyVector, it should return a dynamic bitset - assign this to binCipherText
+    binCipherText = xorInputs(binPlainTextVector, binKeyVector);
     
     // call convertToHex, pass binCipherText
     // assign the result to hexCipherText
     
-    // output the vector <char>
-    
+    // output the char vector (the resultant ciphertext
     
     return 0;
 }
