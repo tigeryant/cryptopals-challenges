@@ -100,18 +100,28 @@ vector<bool> convertToBinary(vector<char> hexInputVector) {
 
 // function - xorInputs
 // takes two arguments of type vector <bool>
-// xors them and returns a vector <bool>
-boost::dynamic_bitset<unsigned long, std::allocator<unsigned long>> xorInputs(vector<bool> binPlainTextVector, vector<bool> binKeyVector) {
-    //return binPlainTextVector ^ binKeyVector;
+// xors them and returns a dynamic bitset
+boost::dynamic_bitset<> xorInputs(vector<bool> binPlainTextVector, vector<bool> binKeyVector) {
+    boost::dynamic_bitset<> plainTextBitset(binPlainTextVector.size());
+    boost::dynamic_bitset<> keyBitset(binKeyVector.size());
+    boost::dynamic_bitset<> xoredBitset(binKeyVector.size());
+
+    for (int i = 0; i < binPlainTextVector.size(); i++) {
+        if (binPlainTextVector[i]) {
+            plainTextBitset[plainTextBitset.size() - i - 1] = 1; // figure out why there was an off by 1 error in this line (why is - 1 needed?)
+        }
+    }
     
-    // working from here - see Fixed XOR notes in Bear
+    // apply the above operation to both vectors. XOR their resultant bitsets. Return the result of the XOR operation
+    for (int i = 0; i < binKeyVector.size(); i++) {
+        if (binKeyVector[i]) {
+            keyBitset[keyBitset.size() - i - 1] = 1;
+        }
+    }
     
-    boost::dynamic_bitset<unsigned long, std::allocator<unsigned long>> x(5);
+    xoredBitset = plainTextBitset ^ keyBitset;
     
-    for (boost::dynamic_bitset<unsigned long, std::allocator<unsigned long>>::size_type i = 0; i < x.size(); ++i)
-            std::cout << x[i];
-    
-    return x;
+    return xoredBitset;
 }
 
 
@@ -134,8 +144,7 @@ int main(int argc, const char * argv[]) {
     vector<char> hexKeyVector;
     vector<bool> binKeyVector;
     
-//    vector<bool> binCipherText;
-    boost::dynamic_bitset<unsigned long, std::allocator<unsigned long>> binCipherText;
+    boost::dynamic_bitset<> binCipherText;
     vector<char> hexCipherText;
     
     // string (hex) --> char vector (hex) --> bool vector (binary)
@@ -188,18 +197,16 @@ int main(int argc, const char * argv[]) {
         cout << bit;
     cout << endl;
     
-    
-    //return 0; // test
-    
-    
-    
     // call xor, passing binPlainTextVector and binKeyVector, it should return a dynamic bitset - assign this to binCipherText
     binCipherText = xorInputs(binPlainTextVector, binKeyVector);
+    
+    cout << "ouput size: " << binCipherText.size() << endl;
+    cout << "output as binary (bitset): " << binCipherText << endl;
     
     // call convertToHex, pass binCipherText
     // assign the result to hexCipherText
     
-    // output the char vector (the resultant ciphertext
+    // output the char vector (the resultant ciphertext)
     
     return 0;
 }
