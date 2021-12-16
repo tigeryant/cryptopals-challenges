@@ -126,7 +126,44 @@ boost::dynamic_bitset<> xorInputs(vector<bool> binPlainTextVector, vector<bool> 
 
 
 // function - convertToHex
-// takes a vector <bool>, converts it to hex and returns a vector <char>
+// takes a dynamic bitset, converts it to hex and returns a vector <char>
+vector<char> convertToHex(boost::dynamic_bitset<> cipherText) { // name this arg something descriptive
+    /*
+     for every 4 bits of the bitset, calculate its decimal value, if it's between 10 and 15, use a switch statement to determine its equivalent hex value. Add that value to a char vector, return that vector
+     */
+    // find the length of the bitset
+    // divide it by 4
+    // this is the number of times to perform the following operation:
+    // (see lines 84 - 95 and do the reverse operation)
+    // take the first 4 elements of the input bitset and add them to a vector<bool> called bits
+    // remove those elements from the bitset
+    
+    int totalHexChars = (int) cipherText.size() / 4;
+    vector<int> hexIntegers;
+    
+    for (int i = 0; i < totalHexChars; i++) {
+        vector<bool> bits;
+        
+        for (int i = 0; i < 4; i++) {
+            // take the element of the cipherText bitset at index zero and store it as a boolean
+            // append this boolean to the end of the bits vector<bool>
+            // remove the element of the cipherText bitset at index zero
+        }
+        
+        // initialise an accumulator int to 0
+    
+    
+    for (int i = 3; i > -1; i--) {
+        // if (bits[index]):
+        // accumulator += 2 raised to the index
+        }
+        
+    // add the accumulator int to the vector<int> hexIntegers
+    }
+    // for each element of vector<int> hexIntegers:
+    // convert it to a hex char and append it to a vector<char>
+    // return this vector<char>
+}
 
 int main(int argc, const char * argv[]) {
     // Handle invalid input and format the input strings correctly
@@ -205,8 +242,15 @@ int main(int argc, const char * argv[]) {
     
     // call convertToHex, pass binCipherText
     // assign the result to hexCipherText
+    //hexCipherText = convertToHex(binCipherText);
     
     // output the char vector (the resultant ciphertext)
+    /*
+    cout << "Ciphertext hex output: ";
+    for (bool bit: hexCipherText)
+        cout << bit;
+    cout << endl;
+     */
     
     return 0;
 }
