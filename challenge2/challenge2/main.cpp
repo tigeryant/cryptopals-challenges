@@ -166,29 +166,9 @@ vector<char> convertToHex(boost::dynamic_bitset<> cipherText) {
         }
         cipherText >>= 4;
         
-        cout << "bits: ";
-        for (int i = 0; i < bits.size(); i++) {
-            cout << bits[i];
-        }
-        cout << endl;
-        
-//        for (int i = 0; i < 4; i++) {
-//            // might need to do the opposite here: right shift instead of left shift
-//            // take the element of the cipherText bitset at index zero and store it as a boolean
-//            bool bit = cipherText[0];
-//            // append this boolean to the end of the bits vector<bool>
-//            bits.push_back(bit);
-//            // remove the element of the cipherText bitset at index zero
-//            // maybe left shift then pop back?
-//            cipherText <<= 1;
-//            cipherText.pop_back();
-//        }
-        
         // initialise an accumulator int to 0
         int accumulator = 0;
     
-    
-        // the following should be the opposite
     for (int i = 3; i > -1; i--) {
         if (bits[i]) {
             accumulator += pow(2, (3 - i));
@@ -199,16 +179,10 @@ vector<char> convertToHex(boost::dynamic_bitset<> cipherText) {
         hexIntegers.push_back(accumulator);
     }
     
-    cout << "hexIntegers length in function: " << hexIntegers.size() << endl;
-    
-    cout << "hexIntegers output in function: ";
-    for (int bit: hexIntegers)
-        cout << bit;
-    cout << endl;
-    
     // for each element of vector<int> hexIntegers:
-    for (int i = 0; i < hexIntegers.size(); i++) { // should this be size or size - 1?
-        char decimalAsChar = 'x';
+    for (int i = ((int)hexIntegers.size() - 1); i > -1; i--) { // should this be size or size - 1?
+//        for (int i = 0; i < -1; i++) { // should this be size or size - 1?
+        char decimalAsChar = 'x'; // change this
         
         switch (hexIntegers[i]) {
             case 10:
@@ -265,7 +239,6 @@ vector<char> convertToHex(boost::dynamic_bitset<> cipherText) {
                 break;
         }
         hexVector.push_back(decimalAsChar);
-        //hexVector.push_back('x');
     }
     // convert it to a hex char and append it to a vector<char>
     // return this vector<char>
