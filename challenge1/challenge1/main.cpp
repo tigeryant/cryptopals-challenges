@@ -176,6 +176,5 @@ int main(int argc, const char * argv[]) {
         cout << bit;
     cout << endl;
     
-    
     return 0;
 }

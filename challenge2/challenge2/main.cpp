@@ -127,7 +127,7 @@ boost::dynamic_bitset<> xorInputs(vector<bool> binPlainTextVector, vector<bool> 
 
 // function - convertToHex
 // takes a dynamic bitset, converts it to hex and returns a vector <char>
-vector<char> convertToHex(boost::dynamic_bitset<> cipherText) { // name this arg something descriptive
+vector<char> convertToHex(boost::dynamic_bitset<> cipherText) {
     /*
      for every 4 bits of the bitset, calculate its decimal value, if it's between 10 and 15, use a switch statement to determine its equivalent hex value. Add that value to a char vector, return that vector
      */
@@ -138,31 +138,138 @@ vector<char> convertToHex(boost::dynamic_bitset<> cipherText) { // name this arg
     // take the first 4 elements of the input bitset and add them to a vector<bool> called bits
     // remove those elements from the bitset
     
+    // test
+    cout << "ciphertext to convert: ";
+    for (int i = 0; i < cipherText.size(); i++) {
+        cout << cipherText[i];
+    }
+    cout << endl;
+    
+    
+    vector<char> hexVector;
+    
     int totalHexChars = (int) cipherText.size() / 4;
     vector<int> hexIntegers;
     
+    
     for (int i = 0; i < totalHexChars; i++) {
-        vector<bool> bits;
+        vector<bool> bits; // re-assign this
         
-        for (int i = 0; i < 4; i++) {
-            // take the element of the cipherText bitset at index zero and store it as a boolean
-            // append this boolean to the end of the bits vector<bool>
-            // remove the element of the cipherText bitset at index zero
+        // for 3 to 0:
+        // bool bit = cipherText[i];
+        // bits.push_back(bit);
+        // right shift the cipherText by 4 bits
+        
+        for (int i = 3; i > -1; i--) {
+            bool bit = cipherText[i];
+            bits.push_back(bit);
         }
+        cipherText >>= 4;
+        
+        cout << "bits: ";
+        for (int i = 0; i < bits.size(); i++) {
+            cout << bits[i];
+        }
+        cout << endl;
+        
+//        for (int i = 0; i < 4; i++) {
+//            // might need to do the opposite here: right shift instead of left shift
+//            // take the element of the cipherText bitset at index zero and store it as a boolean
+//            bool bit = cipherText[0];
+//            // append this boolean to the end of the bits vector<bool>
+//            bits.push_back(bit);
+//            // remove the element of the cipherText bitset at index zero
+//            // maybe left shift then pop back?
+//            cipherText <<= 1;
+//            cipherText.pop_back();
+//        }
         
         // initialise an accumulator int to 0
+        int accumulator = 0;
     
     
+        // the following should be the opposite
     for (int i = 3; i > -1; i--) {
-        // if (bits[index]):
-        // accumulator += 2 raised to the index
+        if (bits[i]) {
+            accumulator += pow(2, (3 - i));
+            }
         }
         
     // add the accumulator int to the vector<int> hexIntegers
+        hexIntegers.push_back(accumulator);
     }
+    
+    cout << "hexIntegers length in function: " << hexIntegers.size() << endl;
+    
+    cout << "hexIntegers output in function: ";
+    for (int bit: hexIntegers)
+        cout << bit;
+    cout << endl;
+    
     // for each element of vector<int> hexIntegers:
+    for (int i = 0; i < hexIntegers.size(); i++) { // should this be size or size - 1?
+        char decimalAsChar = 'x';
+        
+        switch (hexIntegers[i]) {
+            case 10:
+                decimalAsChar = 'a';
+                break;
+            case 11:
+                decimalAsChar = 'b';
+                break;
+            case 12:
+                decimalAsChar = 'c';
+                break;
+            case 13:
+                decimalAsChar = 'd';
+                break;
+            case 14:
+                decimalAsChar = 'e';
+                break;
+            case 15:
+                decimalAsChar = 'f';
+                break;
+                // temporarily hardcoding char assignment - see line 133 from challenge 1 for the proper way
+            case 0:
+                decimalAsChar = '0';
+                break;
+            case 1:
+                decimalAsChar = '1';
+                break;
+            case 2:
+                decimalAsChar = '2';
+                break;
+            case 3:
+                decimalAsChar = '3';
+                break;
+            case 4:
+                decimalAsChar = '4';
+                break;
+            case 5:
+                decimalAsChar = '5';
+                break;
+            case 6:
+                decimalAsChar = '6';
+                break;
+            case 7:
+                decimalAsChar = '7';
+                break;
+            case 8:
+                decimalAsChar = '8';
+                break;
+            case 9:
+                decimalAsChar = '9';
+                break;
+            default:
+                decimalAsChar = hexIntegers[i];
+                break;
+        }
+        hexVector.push_back(decimalAsChar);
+        //hexVector.push_back('x');
+    }
     // convert it to a hex char and append it to a vector<char>
     // return this vector<char>
+    return hexVector;
 }
 
 int main(int argc, const char * argv[]) {
@@ -237,20 +344,22 @@ int main(int argc, const char * argv[]) {
     // call xor, passing binPlainTextVector and binKeyVector, it should return a dynamic bitset - assign this to binCipherText
     binCipherText = xorInputs(binPlainTextVector, binKeyVector);
     
-    cout << "ouput size: " << binCipherText.size() << endl;
-    cout << "output as binary (bitset): " << binCipherText << endl;
+    cout << "ciphertext size: " << binCipherText.size() << endl;
+    cout << "ciphertext as binary (bitset): " << binCipherText << endl;
     
     // call convertToHex, pass binCipherText
     // assign the result to hexCipherText
-    //hexCipherText = convertToHex(binCipherText);
+    hexCipherText = convertToHex(binCipherText);
     
     // output the char vector (the resultant ciphertext)
-    /*
+    
+    // test
+    cout << "cipherText length: " << hexCipherText.size() << endl;
+    
     cout << "Ciphertext hex output: ";
-    for (bool bit: hexCipherText)
+    for (char bit: hexCipherText)
         cout << bit;
     cout << endl;
-     */
-    
+     
     return 0;
 }
